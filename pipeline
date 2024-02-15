@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    environment {
+        GITHUB_CREDENTIALS = credentials('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')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    git credentialsId: GITHUB_CREDENTIALS, url: 'https://github.com/Sravan1001/sample-java-app.git'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    def mvnHome = tool 'Maven'
+                    sh "${mvnHome}/bin/mvn clean package"
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    def mvnHome = tool 'Maven'
+                    sh "${mvnHome}/bin/mvn test"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Add deployment steps here if needed
+            }
+        }
+    }
+}
